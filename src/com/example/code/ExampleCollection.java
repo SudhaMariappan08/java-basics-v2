@@ -20,6 +20,9 @@ public class ExampleCollection {
 	    	
 	    	// Map
 	    	exampleMap();
+	    	
+	    	//TreeMapList
+	    	exampleTreeMapList();
 	       
 	    }
 	    
@@ -111,4 +114,25 @@ public class ExampleCollection {
 	    }
 
 
+	    public static void exampleTreeMapList() {
+	            TreeMap<List<Integer>, String> treeMap = new TreeMap<>(
+	                (list1, list2) -> {
+	                    int minSize = Math.min(list1.size(), list2.size());
+	                    for (int i = 0; i < minSize; i++) {
+	                        int cmp = Integer.compare(list1.get(i), list2.get(i));
+	                        if (cmp != 0) return cmp; 
+	                    }
+	                    return Integer.compare(list1.size(), list2.size()); 
+	                }
+	            );
+
+	            treeMap.put(Arrays.asList(1, 2, 3), "First");
+	            treeMap.put(Arrays.asList(1, 2), "Second");
+	            treeMap.put(Arrays.asList(2, 1), "Third");
+
+	            System.out.println("TreeMapList:" +treeMap);
+	    }
+
+
+	    
 }
