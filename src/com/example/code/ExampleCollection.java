@@ -1,5 +1,8 @@
 package com.example.code;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.example.code.dto.Student;
 
@@ -23,6 +26,10 @@ public class ExampleCollection {
 	    	
 	    	//TreeMapList
 	    	exampleTreeMapList();
+	    	
+	    	exampleMapAndFlatMap();
+	    	
+	    	exampleFunctionMapper("square");
 	       
 	    }
 	    
@@ -84,7 +91,12 @@ public class ExampleCollection {
 	        studentQueue.add(new Student("Mani", 81));
 	        studentQueue.add(new Student("Sindhu", 70));
 	        
-	        System.out.println("Student Output after sorted by Marks:" + studentQueue);
+	        System.out.println("Student Output after sorted by Marks:");
+			while (!studentQueue.isEmpty()) {
+				System.out.println(studentQueue.poll());
+			}
+	        
+	        //System.out.println("Student Output after sorted by Marks:" + studentQueue);
 	       
 	    }
 
@@ -132,7 +144,45 @@ public class ExampleCollection {
 
 	            System.out.println("TreeMapList:" +treeMap);
 	    }
-
-
 	    
+	    private static void exampleMapAndFlatMap() {
+	    	
+			List<String> sentences = Arrays.asList("Java is a programming language",
+					"Collection is a framework in java");
+			
+			// map usage
+			List<Stream<String>> mappedSentence = sentences.stream()
+					.map(sentence -> Arrays.stream(sentence.split(" ")))
+					.collect(Collectors.toList());
+			
+			System.out.println("Using map");
+			mappedSentence.forEach(stream ->stream.forEach(System.out::println));
+			
+			List<String> flatMappedSentence = sentences.stream().flatMap(sentence -> Arrays.stream(sentence.split(" ")))
+					.collect(Collectors.toList());
+			
+			System.out.println("Using flatMap:" + flatMappedSentence);
+	    }
+
+        public static void exampleFunctionMapper(String selectedMapper) {
+	            // Input list
+	            List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+
+	            // Define multiple mappers
+	            Map<String, Function<Integer, Integer>> mappers = new HashMap<>();
+	            mappers.put("square", x -> x * x);
+	            mappers.put("double", x -> x * 2);
+	            mappers.put("increment", x -> x + 1);
+
+	            // Apply a selected mapper
+	            Function<Integer, Integer> mapper = mappers.get(selectedMapper);
+
+	            List<Integer> result = numbers.stream()
+	                                          .map(mapper)
+	                                          .toList();
+
+	            System.out.println("Mapped Numbers (" + selectedMapper + "): " + result);
+	        }
+
+    
 }

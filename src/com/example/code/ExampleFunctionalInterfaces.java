@@ -1,4 +1,5 @@
 package com.example.code;
+import java.util.*;
 import java.util.function.*;
 
 public class ExampleFunctionalInterfaces {
@@ -18,6 +19,9 @@ public class ExampleFunctionalInterfaces {
 		consumer();
 		
 		supplier();
+		
+		//use case of FI		
+		taskManager();
 		
 	}
 	
@@ -62,4 +66,43 @@ public class ExampleFunctionalInterfaces {
 		Supplier<String> supplyText = () -> "Hello Supplier";
 		System.out.print(supplyText.get());
 	}
+	
+	// A method to execute a task
+    public static void executeTask(String taskType, Consumer<String> task, String taskData) {
+        System.out.println("Executing " + taskType + " task...");
+        task.accept(taskData);
+    }
+	
+	
+	private static void taskManager() {	
+		
+		// Define task behaviors using lambdas
+        Consumer<String> emailTask = email -> System.out.println("Sending email to: " + email);
+        Consumer<String> fileProcessingTask = fileName -> System.out.println("Processing file: " + fileName);
+        Consumer<String> dbCleanupTask = dbName -> System.out.println("Cleaning up database: " + dbName);
+        
+		// Register tasks in a task manager (Map)
+        Map<String, Consumer<String>> taskManager = new HashMap<>();
+        taskManager.put("Email", emailTask);
+        taskManager.put("FileProcessing", fileProcessingTask);
+        taskManager.put("DatabaseCleanup", dbCleanupTask);
+		
+		 // Task data
+        String email = "user@example.com";
+        String file = "document.txt";
+        String database = "user_db";
+        
+     // Execute tasks dynamically
+        taskManager.forEach((taskType, task) -> {
+            String taskData = switch (taskType) {
+                case "Email" -> email;
+                case "FileProcessing" -> file;
+                case "DatabaseCleanup" -> database;
+                default -> null;
+            };
+            if (taskData != null) executeTask(taskType, task, taskData);
+        });
+     
+	}
+
 }
