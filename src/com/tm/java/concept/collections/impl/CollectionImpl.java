@@ -1,4 +1,4 @@
-package com.tm.java.concept.impl;
+package com.tm.java.concept.collections.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -42,6 +43,10 @@ public class CollectionImpl {
 		streamAndFlatteningString();
 
 		dynamicMappingFunction("square");
+		
+		rankingStudentsInNeededOrder();
+		
+		sortByMarks();
 
 	}
 
@@ -211,5 +216,66 @@ public class CollectionImpl {
 
 		System.out.println("Mapped Numbers (" + selectedMapper + "): " + result);
 	}
+
+	/*
+	 * Multiple functions of collections in single method,
+	 * finding unique students, sorting them in desc order by marks, grouping by marks, finding top ranked student
+	 * using queue to simulate attendance processing
+	 */
+	public static void rankingStudentsInNeededOrder() {
+		List<Student> students = Arrays.asList(new Student("Ganesh", 85), new Student("Suresh", 92),
+				new Student("Ramesh", 68), new Student("Ganesh", 85), // Duplicate
+				new Student("Bala", 75), new Student("Pavi", 92));
+
+		Set<Student> uniqueStudents = new HashSet<>(students);
+		System.out.println("Unique Students:");
+		uniqueStudents.forEach(System.out::println);
+
+		List<Student> sortedStudents = uniqueStudents.stream()
+				.sorted(Comparator.comparingInt(Student::getMarks).reversed()).collect(Collectors.toList());
+
+		System.out.println("\nSorted Students:");
+		sortedStudents.forEach(System.out::println);
+
+		Map<String, List<Student>> groupedByGrade = sortedStudents.stream().collect(Collectors.groupingBy(student -> {
+			if (student.getMarks() >= 90)
+				return "A";
+			else if (student.getMarks() >= 75)
+				return "B";
+			else
+				return "C";
+		}));
+
+		System.out.println("\nStudents Grouped by Grades:");
+		groupedByGrade.forEach((grade, studentList) -> {
+			System.out.println("Grade " + grade + ": " + studentList);
+		});
+
+		Student topStudent = sortedStudents.get(0); // The first student in sorted list
+		System.out.println("\nTop Student: " + topStudent.getName());
+
+		Queue<Student> attendanceQueue = new LinkedList<>(sortedStudents);
+		System.out.println("\nProcessing Attendance:");
+		while (!attendanceQueue.isEmpty()) {
+			Student student = attendanceQueue.poll(); // Retrieve and remove the head of the queue
+			System.out.println("Marking attendance for: " + student.getName());
+		}
+	}
+	    
+	    /*
+	     * TreeMap used to sort list of students by marks
+	     */
+		private static void sortByMarks() {
+			TreeMap<String, Integer> studentMarks = new TreeMap<>();
+
+			studentMarks.put("Sindhu", 85);
+			studentMarks.put("Ram", 90);
+			studentMarks.put("Sudar", 80);
+
+			System.out.println("Students and marks (sorted by name):");
+			for (String student : studentMarks.keySet()) {
+				System.out.println(student + ": " + studentMarks.get(student));
+			}
+		}
 
 }

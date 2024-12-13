@@ -1,4 +1,4 @@
-package com.tm.java.concept.impl;
+package com.tm.java.concept.collections.impl;
 
 import java.util.Arrays;
 import java.util.List;
